@@ -1,0 +1,40 @@
+NAME
+    perl-module-version - utility to find $VERSION of Perl module
+
+USAGE
+     $ perl-module-version IO::File
+     $ perl-module-version [--help | -h | -?]
+
+DESCRIPTION
+    Simple, light-weight utility for extracting the $VERSION of a Perl
+    module. Writes to "stdout".
+
+    Shorthand for:
+
+        perl -MSome::Module -le 'print $Some::Module::VERSION'
+
+    with the nicety of reporting if $VERSION is undef, etc.
+
+CAVEATS
+    In order to get the value of $VERSION, the module will be loaded.
+    Consequently:
+
+    *   the module in question must be free of syntax errors
+
+    *   the module should be free of on-load side-effects
+
+    For most modules, this requirement should not cause problems.
+
+TODO
+    Handle modules that are stuffed in with other module files.
+
+BUGS
+    None so far.
+
+AUTHOR
+    Richard W. Norton, <rwtnorton@gmail.com>
+
+LICENSE
+    This library is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
