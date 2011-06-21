@@ -1,0 +1,78 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+my $module = $ARGV[0];
+if (!@ARGV || grep { /^(?:--help|-h|-\?)$/ } @ARGV) {
+    print "Usage: $0 perl-module\n";
+    exit;
+}
+
+my $loaded = eval "require $module"; # UNIVERSAL::require would be nice.
+my $version;
+if ($loaded) {
+    $version = do {
+        no strict 'refs';
+        ${"$module\::VERSION"};
+    };
+    $version = 'undef' if !defined $version; # //= would be nice.
+}
+else {
+    $version = 'unable to load';
+}
+print "$version\n";
+__END__
+
+=head1 NAME
+
+perl-module-version - utility to find $VERSION of Perl module
+
+=head1 USAGE
+
+ $ perl-module-version IO::File
+ $ perl-module-version [--help | -h | -?]
+
+=head1 DESCRIPTION
+
+Simple, light-weight utility for extracting the C<$VERSION> of
+a Perl module.  Writes to C<stdout>.
+
+Shorthand for:
+
+    perl -MSome::Module -le 'print $Some::Module::VERSION'
+
+with the nicety of reporting if C<$VERSION> is undef, etc.
+
+=head1 CAVEATS
+
+In order to get the value of C<$VERSION>, the module will be loaded.
+Consequently:
+
+=over
+
+=item * the module in question must be free of syntax errors
+
+=item * the module should be free of on-load side-effects
+
+=back
+
+For most modules, this requirement should not cause problems.
+
+=head1 TODO
+
+Handle modules that are stuffed in with other module files.
+
+=head1 BUGS
+
+None so far.
+
+=head1 AUTHOR
+
+Richard W. Norton, <rwtnorton@gmail.com>
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
